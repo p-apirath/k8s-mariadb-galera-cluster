@@ -26,6 +26,7 @@ metadata:
   name: mariadb
   labels:
     app: mariadb
+  namespace: galera-mariadb
 spec:
   ports:
   - port: 3306
@@ -40,6 +41,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: mysql-password
+  namespace: galera-mariadb
 type: Opaque
 data:
   # Root password (base64): echo -n 'apirath-lab' | base64
@@ -51,6 +53,7 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   name: mariadb
+  namespace: galera-mariadb
 spec:
   serviceName: "mariadb"
   replicas: 3
@@ -104,10 +107,10 @@ spec:
   - metadata:
       name: mysql-datadir
       annotations:
-        volume.beta.kubernetes.io/storage-class: gcp-storage
+        volume.beta.kubernetes.io/storage-class: gcp-storageclass
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      # storageClassName: gcp-storage
+      # storageClassName: gcp-storageclass
       resources:
         requests:
           storage: 10Gi
